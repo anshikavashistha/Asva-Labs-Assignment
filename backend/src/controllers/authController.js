@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { User, Tenant } = require('../models');
+const UserService = require('../services/userService');
+const { Tenant } = require('../models');
 
 class AuthController {
   static async register(req, res) {
@@ -8,10 +9,7 @@ class AuthController {
       const { username, email, password, tenantName } = req.body;
 
       // Check if user already exists
-      const existingUser = await User.findOne({
-        where: { email }
-      });
-
+      const existingUser = await UserService.findByEmail(email);
       if (existingUser) {
         return res.status(400).json({ error: 'User already exists' });
       }
@@ -19,16 +17,14 @@ class AuthController {
       // Create tenant if provided
       let tenant;
       if (tenantName) {
-        tenant = await Tenant.create({
-          name: tenantName
-        });
+        tenant = await Tenant.create({ name: tenantName });
       }
 
       // Hash password
       const hashedPassword = await bcrypt.hash(password, 10);
 
       // Create user
-      const user = await User.create({
+      const user = await UserService.createUser({
         username,
         email,
         password: hashedPassword,
@@ -65,11 +61,7 @@ class AuthController {
       const { email, password } = req.body;
 
       // Find user
-      const user = await User.findOne({
-        where: { email },
-        include: [{ model: Tenant, as: 'Tenant' }]
-      });
-
+      const user = await UserService.findByEmail(email);
       if (!user) {
         return res.status(401).json({ error: 'Invalid credentials' });
       }
@@ -106,11 +98,10 @@ class AuthController {
 
   static async getProfile(req, res) {
     try {
-      const user = await User.findByPk(req.user.id, {
-        attributes: { exclude: ['password'] },
-        include: [{ model: Tenant, as: 'Tenant' }]
-      });
-
+      const user = await UserService.findById(req.user.id);
+      if (user) {
+        delete user.dataValues.password;
+      }
       res.json(user);
     } catch (error) {
       console.error('Get profile error:', error);
