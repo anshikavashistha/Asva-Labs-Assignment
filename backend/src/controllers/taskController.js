@@ -1,7 +1,7 @@
 const { Task, Project, User } = require('../models');
-const CacheService = require('../services/cacheService');
-const EventPublisher = require('../services/eventPublisher');
-const EVENT_TYPES = require('../events/eventTypes');
+//const CacheService = require('../services/cacheService');
+//const EventPublisher = require('../services/eventPublisher');
+//const EVENT_TYPES = require('../events/eventTypes');
 
 class TaskController {
   static async getAll(req, res) {

@@ -1,8 +1,7 @@
 const express = require('express');
 const TaskController = require('../controllers/taskController');
 const { authenticateToken } = require('../middlewares/auth');
-
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 // All routes require authentication
 router.use(authenticateToken);

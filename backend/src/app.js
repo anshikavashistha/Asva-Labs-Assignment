@@ -31,7 +31,7 @@ app.use('/api/projects/:projectId/tasks', taskRoutes);
 app.use(errorHandler);
 
 // 404 handler
-app.use('*', (req, res) => {
+app.use( (req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 

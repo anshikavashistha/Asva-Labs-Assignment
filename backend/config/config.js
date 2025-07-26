@@ -1,6 +1,18 @@
 require('dotenv').config();
 
 module.exports = {
+  development: {
+    dialect: 'sqlite',
+    storage: './database.sqlite'
+  },
+  test: {
+    dialect: 'sqlite',
+    storage: ':memory:'
+  },
+  production: {
+    dialect: 'sqlite',
+    storage: './database.sqlite'
+  },
   redis: {
     url: process.env.REDIS_URL || 'redis://localhost:6379'
   },
@@ -13,7 +25,5 @@ module.exports = {
   },
   server: {
     port: process.env.PORT || 3000
-  },
-  dialect: 'sqlite',
-  storage: './database.sqlite'
+  }
 };
