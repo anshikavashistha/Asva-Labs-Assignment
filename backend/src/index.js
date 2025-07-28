@@ -1,6 +1,6 @@
 // src/index.js
 const app = require('./app');
-const sequelize = require('./config/database');
+const { initializeDatabase } = require('./config/initDatabase');
 require('dotenv').config();
 
 const PORT = process.env.PORT || 3000;
@@ -8,15 +8,8 @@ const PORT = process.env.PORT || 3000;
 // Initialize database and start server
 async function startServer() {
   try {
-    // Test database connection
-    await sequelize.authenticate();
-    console.log('✅ Database connection established successfully.');
-
-    // Sync database (in development)
-    if (process.env.NODE_ENV === 'development') {
-      await sequelize.sync({ alter: true });
-      console.log('✅ Database synchronized.');
-    }
+    // Initialize database
+    await initializeDatabase();
 
     // Start server
     app.listen(PORT, () => {

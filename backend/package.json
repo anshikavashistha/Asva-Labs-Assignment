@@ -5,7 +5,12 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --ci --coverage --watchAll=false",
+    "cleanup": "node scripts/cleanup-database.js",
+    "db:reset": "rm -f database.sqlite && npm start"
   },
   "keywords": [],
   "author": "",
